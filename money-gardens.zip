@@ -1,3 +1,22 @@
+// package.json
+{
+  "name": "money-gardens",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  }
+}
+
+
 // src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -21,13 +40,8 @@ const App = () => {
   const [items, setItems] = useState([]);
   const [score, setScore] = useState(0);
 
-  const moveLeft = () => {
-    setLane((prev) => Math.max(0, prev - 1));
-  };
-
-  const moveRight = () => {
-    setLane((prev) => Math.min(2, prev + 1));
-  };
+  const moveLeft = () => setLane((prev) => Math.max(0, prev - 1));
+  const moveRight = () => setLane((prev) => Math.min(2, prev + 1));
 
   useEffect(() => {
     const interval = setInterval(() => {
