@@ -1,4 +1,4 @@
-"react-scripts build"
+Command "react-scripts build" 
 // package.json
 {"scripts": {
   "start": "react-scripts start",
