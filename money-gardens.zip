@@ -1,4 +1,4 @@
-  Command "react-scripts build" exited with 127
+npm install react-scripts
 // package.json
 {
   "name": "money-gardens",
