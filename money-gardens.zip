@@ -1,4 +1,4 @@
-Command "react-scripts build" 
+"react-scripts build" exited with 127
 // package.json
 {"scripts": {
   "start": "react-scripts start",
