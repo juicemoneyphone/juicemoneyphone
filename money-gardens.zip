@@ -1,0 +1,145 @@
+// src/index.js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+
+// src/App.js
+import React, { useState, useEffect } from 'react';
+import './index.css';
+
+const App = () => {
+  const [lane, setLane] = useState(1); // 0 = left, 1 = middle, 2 = right
+  const [items, setItems] = useState([]);
+  const [score, setScore] = useState(0);
+
+  const moveLeft = () => {
+    setLane((prev) => Math.max(0, prev - 1));
+  };
+
+  const moveRight = () => {
+    setLane((prev) => Math.min(2, prev + 1));
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setItems((prev) => {
+        const newItems = prev.map((item) => ({ ...item, y: item.y + 1 }));
+        return newItems.filter((item) => item.y < 10);
+      });
+
+      if (Math.random() < 0.3) {
+        const type = Math.random() < 0.5 ? 'money' : 'honeybun';
+        setItems((prev) => [...prev, { lane: Math.floor(Math.random() * 3), y: 0, type }]);
+      }
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    setItems((prev) => {
+      return prev.filter((item) => {
+        if (item.y === 9 && item.lane === lane) {
+          setScore((s) => s + (item.type === 'money' ? 10 : 5));
+          return false;
+        }
+        return true;
+      });
+    });
+  }, [items]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowLeft') moveLeft();
+      if (e.key === 'ArrowRight') moveRight();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  return (
+    <div className="game">
+      <h1>Money Gardens</h1>
+      <h2>Score: {score}</h2>
+      <div className="road">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="lane">
+            {items
+              .filter((item) => item.lane === i)
+              .map((item, idx) => (
+                <div key={idx} className={`item ${item.type}`} style={{ top: `${item.y * 10}%` }}></div>
+              ))}
+            {lane === i && <div className="player">🚗</div>}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default App;
+
+
+// src/index.css
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #1a1a1a;
+  color: white;
+  text-align: center;
+}
+
+.game {
+  padding: 20px;
+}
+
+.road {
+  display: flex;
+  justify-content: center;
+  height: 400px;
+  margin-top: 20px;
+  position: relative;
+}
+
+.lane {
+  width: 100px;
+  height: 100%;
+  background: #333;
+  margin: 0 5px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.player {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+}
+
+.item {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+}
+
+.item.money::after {
+  content: '💵';
+}
+
+.item.honeybun::after {
+  content: '🍯';
+}
