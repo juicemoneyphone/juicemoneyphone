@@ -1,6 +1,9 @@
-npm install react-scripts
+
 // package.json
-{
+{"scripts": {
+  "start": "react-scripts start",
+  "build": "react-scripts build"
+}
   "name": "money-gardens",
   "version": "1.0.0",
   "private": true,
